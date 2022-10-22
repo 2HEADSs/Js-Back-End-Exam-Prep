@@ -5,25 +5,43 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{title}}</title>
+    <title>Book Store</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+
 </head>
 
 <body>
-    <a href="/auth/login">Login</a>
-    <a href="/auth/register">Register</a>
-    <a href="/auth/logout">Logout</a>
-
     {{#if errors}}
     <div>
-        {{#each errors}}
-        <p>{{this}}</p>
-        {{/each}}
+        <div class="errorContainer">
+            {{#each errors}}
+            <p>{{this}}</p>
+            {{/each}}
+        </div>
+
     </div>
     {{/if}}
+    <header class="header">
 
-    {{!-- if we use {{}} hendlebars will escape html wich we send to the template--}}
+        <div class="header">
+            <nav class="navbar">
+                {{#if user}}
+                <a href="/">Home</a>
+                <a href="/catalog">Catalog</a>
+                <!--Only for logged user-->
+                <a href="/auth/profile">Profile</a>
+                <a href="/book/create">Create Review</a>
+                <a href="/auth/logout">Logout</a>
+                <!--Only for guest-->
+                <a href="/auth/login">Login</a>
+                <a href="/auth/register">Register</a>
+            </nav>
+        </div>
+
+    </header>
+
     {{{body}}}
-
 
 </body>
 

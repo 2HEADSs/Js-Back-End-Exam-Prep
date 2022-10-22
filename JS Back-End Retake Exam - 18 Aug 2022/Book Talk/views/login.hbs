@@ -1,7 +1,12 @@
-<h1>Login Page</h1>
+<section class="login-form-container">
 
-<form method="post">
-    <label>Username: <input type="text" name="username" value="{{body.username}}"> </label>
-    <label>Password: <input type="password" name="password"> </label>
-    <button>Login</button>
-</form>
+    <form method="post">
+        <h3>Login</h3>
+        <label>Email</label>
+        <input type="email" name="email" class="box" id="">
+        <label>Password</label>
+        <input type="password" name="password" class="box" id="">
+        <input type="submit" value="Login" class="btn">
+        <p>Don't have an account ? <a href="#">Create one</a></p>
+    </form>
+</section>
