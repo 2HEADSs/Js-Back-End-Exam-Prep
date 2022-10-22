@@ -13,6 +13,8 @@ async function getById(id) {
     return Book.findById(id).lean()
 }
 
+
+
 async function editById(id, data) {
     const existing = await Book.findById(id)
     existing.title = data.title
@@ -29,11 +31,26 @@ async function deleteById(id) {
     return Book.findByIdAndDelete(id)
 }
 
+
+async function wish(bookId, userId) {
+    const existing = await Book.findById(bookId)
+    existing.wishingList.push(userId)
+
+    return existing.save()
+}
+
+async function getAllWished(userId) {
+    const books = await Book.find({})
+    return books.map(x=>x.wishingList)
+}
+
 module.exports = {
     getAll,
     createBook,
     getById,
     editById,
-    deleteById
+    deleteById,
+    wish,
+    getAllWished
 
 }

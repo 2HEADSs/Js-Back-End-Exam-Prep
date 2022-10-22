@@ -1,16 +1,18 @@
-const { createBook, getById, editById, deleteById } = require('../services/bookServices');
+const { isGuest } = require('../middlewares/guard');
+const { createBook, getById, editById, deleteById, wish } = require('../services/bookServices');
 const { parseError } = require('../util/parser');
 
 const bookController = require('express').Router()
 
 
-bookController.get('/create', (req, res) => {
+bookController.get('/create', isGuest(), (req, res) => {
+    console.log(req.user);
     res.render('create', {
         user: req.user
     })
 });
 
-bookController.post('/create', async (req, res) => {
+bookController.post('/create', isGuest(), async (req, res) => {
     const book = {
         title: req.body.title,
         author: req.body.author,
@@ -34,11 +36,13 @@ bookController.post('/create', async (req, res) => {
 
 bookController.get('/:id', async (req, res) => {
     const book = await getById(req.params.id)
-    const isOwner = book.owner.toString() == (req.user?._id).toString()
+    book.isOwner = book.owner.toString() == (req.user?._id)?.toString()
+    book.wish = book.wishingList.map(x=>x.toString()).includes(req.user._id.toString())
+    console.log();
     res.render('details', {
         book,
         user: req.user,
-        isOwner
+        // isOwner
     })
 });
 
@@ -73,6 +77,8 @@ bookController.post('/:id/edit', async (req, res) => {
         res.render('edit', {
             error: parseError(error),
             book,
+            user: req.user,
+
         })
     }
 });
@@ -89,6 +95,20 @@ bookController.get('/:id/delete', async (req, res) => {
     res.redirect('/catalog')
 
 });
+
+bookController.get('/:id/wish', async (req, res) => {
+    //TODO guard for owner
+    const book = await getById(req.params.id)
+
+    if (book.owner.toString() != (req.user?._id).toString()
+        && book.wishingList.map(x => x.toString()).includes(req.user._id.toString())== false){
+            await wish(req.params.id, req.user._id)
+        }
+
+    res.redirect('/catalog')
+
+});
+
 
 
 

@@ -1,16 +1,17 @@
+const { isGuest, hasUser } = require('../middlewares/guard');
 const { register, login } = require('../services/userService');
 const { parseError } = require('../util/parser');
 
 const authController = require('express').Router()
 
-authController.get('/register', (req, res) => {
+authController.get('/register', hasUser(), (req, res) => {
     // TODO replace with actual view
     res.render('register', {
         title: 'Register page'
     });
 });
 
-authController.post('/register', async (req, res) => {
+authController.post('/register', hasUser(), async (req, res) => {
 
     try {
         if (req.body.username == '' || req.body.email == '' || req.body.password == '') {
@@ -40,38 +41,35 @@ authController.post('/register', async (req, res) => {
 
 });
 
-authController.get('/login', (req, res) => {
+authController.get('/login', hasUser(), (req, res) => {
     // TODO replace with actual view
 
     res.render('login', {
-        title: 'Login Page'
+
     });
 });
 
-authController.post('/login', async (req, res) => {
+authController.post('/login', hasUser(), async (req, res) => {
     try {
         const token = await login(req.body.email, req.body.password);
 
         //add token to response
         res.cookie('token', token);
-        res.redirect('/');  
+        res.redirect('/');
     } catch (error) {
-
+        console.log(req.body.username)
         const errors = parseError(error);
         res.render('login', {
-            title: 'Login Page',
             errors,
-            body: {
-                username: req.body.username
-            }
         });
     }
 });
 
 
-authController.get('/logout', (req, res) => {
+authController.get('/logout', isGuest(), (req, res) => {
     res.clearCookie('token');
     res.redirect('/')
-})
+});
+
 
 module.exports = authController
