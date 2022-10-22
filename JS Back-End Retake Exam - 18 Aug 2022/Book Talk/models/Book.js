@@ -15,7 +15,7 @@ const bookSchema = new Schema({
     genre: {
         type: String, required: true, minlength: [3, 'Genre must be at least 2 characters long!']
     },
-    bookReview: { type: String, required: true, minlength: [10, 'Review must be at least 10 characters long!'] },
+    review: { type: String, required: true, minlength: [10, 'Review must be at least 10 characters long!'] },
     stars: {
         type: Number,
         required: true,
@@ -35,6 +35,6 @@ const bookSchema = new Schema({
 //index is not required; strength:2 - to be case insensitive 
 
 
-const Book = model('User', userSchema);
+const Book = model('Book', bookSchema);
 
 module.exports = Book
