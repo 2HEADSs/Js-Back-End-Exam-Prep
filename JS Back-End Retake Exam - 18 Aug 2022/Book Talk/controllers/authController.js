@@ -29,7 +29,6 @@ authController.post('/register', async (req, res) => {
     } catch (error) {
         const errors = parseError(error)
 
-        //TODO add error display to actual template from assignment
         res.render('register', {
             title: 'Register page',
             errors,
@@ -55,9 +54,9 @@ authController.post('/login', async (req, res) => {
 
         //add token to response
         res.cookie('token', token);
-        res.redirect('/');  // TODO replace with redirect  by assignment
+        res.redirect('/');  
     } catch (error) {
-        //TODO add error display 
+
         const errors = parseError(error);
         res.render('login', {
             title: 'Login Page',

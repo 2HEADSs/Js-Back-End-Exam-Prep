@@ -8,8 +8,7 @@ catalogController.get('/', async (req, res) => {
     let books = []
     try {
         books = await getAll()
-        console.log(books);
-        res.render('catalog', {books})
+        res.render('catalog', { books, user: req.user })
 
     } catch (error) {
         res.render('home', {
